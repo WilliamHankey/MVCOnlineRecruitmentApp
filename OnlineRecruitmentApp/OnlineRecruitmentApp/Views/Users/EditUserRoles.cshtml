@@ -1,0 +1,50 @@
+﻿@model Microsoft.AspNet.Identity.EntityFramework.IdentityUser
+@{
+    ViewBag.Title = "Users";
+}
+
+<h2>Edit User Roles</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            <div class="col-md-10">
+                @* Since we are not editing the username as well, we want to disable it.
+                    Replace the usual @Html.EditorFor() with @Html.TextBoxFor() and disable it *@
+                @Html.TextBoxFor(model => model.UserName, new { disabled = "disabled" })
+            </div>
+        </div>
+
+        <br />
+
+        @*Display the Roles*@
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                @Html.Label("Roles (Press Ctrl to select multiple rows)")
+            </div>
+
+            <div class="col-md-offset-2 col-md-10">
+                @Html.DropDownList("RoleId", (MultiSelectList)ViewBag.Roles, new { multiple = "multiple", size = 8 })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
