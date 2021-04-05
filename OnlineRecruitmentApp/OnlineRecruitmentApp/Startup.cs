@@ -48,13 +48,44 @@ namespace OnlineRecruitmentApp
                     var result1 = UserManager.AddToRole(user.Id, "Admin");
                 }
             }
+            if (!roleManager.RoleExists("Moderator"))
+            {
+                // first we create Admin role   
+                var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
+                role.Name = "Moderator";
+                roleManager.Create(role);
 
-            // Creating Manager role    
-            if (!roleManager.RoleExists("Manager"))
+                // Here we create a user and grant him/her the Admin role.
+                // The default behaviour when creating users is a bit weird.
+                // When users register, only their emails and passwords are required,
+                // but these emails are stored in the database as both emails and usernames.
+                // During login, the emails are again requested, but then compared to the
+                // username in the DB. This behaviour can be changed, but for now we will
+                // just go with the flow. Since we are directly creating both username and
+                // email here, we ensure that they are both the same.
+                string myEmail = "moderator@gmail.com";
+                string myPassword = "A@b123456";
+                var user = new ApplicationUser { UserName = myEmail, Email = myEmail };
+                var result = await UserManager.CreateAsync(user, myPassword);
+                if (result.Succeeded)
+                {
+                    var result1 = UserManager.AddToRole(user.Id, "Moderator");
+                }
+            }
+
+            if (!roleManager.RoleExists("Applicant"))
             {
                 var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
-                role.Name = "Manager";
+                role.Name = "Applicant";
                 roleManager.Create(role);
+            
+            }
+            if (!roleManager.RoleExists("Employer"))
+            {
+                var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
+                role.Name = "Employer";
+                roleManager.Create(role);
+
             }
 
         }
