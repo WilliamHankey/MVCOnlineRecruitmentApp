@@ -29,5 +29,7 @@ namespace OnlineRecruitmentApp.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<OnlineRecruitmentApp.Models.Profile> Profiles { get; set; }
     }
 }
